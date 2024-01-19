@@ -1,0 +1,91 @@
+﻿@model PaginatedList<Vilau_Paula_Proiect.Models.Toy>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Toys</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-secondary">New Toy</a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index" class="btn btn-secondary">Back to Full List</a>
+        </p>
+    </div>
+</form>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <p>Sort By:</p>
+                <a asp-action="Index"
+                    asp-route-sortOrder="@ViewData["NameSortParam"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                    class="btn btn-secondary" >Name</a>
+                <a asp-action="Index"
+                    asp-route-sortOrder="@ViewData["CategorySortParam"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                    class="btn btn-secondary">Category</a>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["SupplierSortParam"]"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="btn btn-secondary">Supplier</a>
+                <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["PriceSortParam"]"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="btn btn-secondary"
+                >Price</a>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["RatingSortParam"]"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                     class="btn btn-secondary"
+                >Rating</a>
+        </div>
+    </div>
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-primary @prevDisabled">
+        Previous
+    </a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-primary @nextDisabled">
+        Next
+    </a>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card">
+                    <img src="~/images/@item.Image" class="card-img-top" alt="@item.Name" style="height: 250px; width: auto; margin: 15px">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text" style="font-size: smaller;">@(item.Description?.Length > 30 ? item.Description.Substring(0, 30) + "..." : item.Description)</p>
+                        <p class="card-text">Category: @item.Category.Name</p>
+                        <p class="card-text">Brand: @item.Supplier.Name</p>
+                        <p class="card-text">Price: @item.Price lei</p>
+                        <p class="card-text">Rating: @item.AverageStars <img src="~/images/star.png" alt="stars" height="25" width="25"></p>
+                        <a asp-action="Edit" asp-route-id="@item.ToyID" class="btn btn-secondary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.ToyID" class="btn btn-secondary">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.ToyID" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

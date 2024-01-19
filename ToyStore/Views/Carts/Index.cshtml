@@ -1,0 +1,69 @@
+﻿@model Vilau_Paula_Proiect.Models.Cart
+
+@{
+    ViewData["Title"] = "Cart";
+}
+<h2>Shopping cart</h2>
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Value</th>
+            <th></th>
+        </tr>
+    @if (Model != null && Model.CartToys != null)
+    {
+        @foreach (var item in Model.CartToys)
+        {
+            string selectedRow = "";
+            if (item.ToyID == (int?)ViewData["ToyID"])
+            {
+                selectedRow = "table-info";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @item.Toy.Name
+                </td>
+                <td>
+                    <img src="~/images/@item.Toy.Image" alt="@item.Toy.Name" height="50" width="50">
+                </td>
+                <td>
+                    @item.Toy.Description
+                </td>
+                <td>
+                    @item.Toy.Price
+                </td>
+                <td>
+                    @item.Quantity
+                </td>
+                <td>
+                    @item.Value
+                </td>
+                <td>
+                    <form asp-controller="Carts" asp-action="DeleteCartToy">
+                        <input type="hidden" name="CartId" value="@Model.CartID"/>
+                        <input type="hidden" name="ToyId" value="@item.Toy.ToyID" />
+                        <input type="submit" value="Delete" class="btn btn-primary" />
+                    </form>
+                </td>
+            </tr>
+        }
+
+    }
+    else
+    {
+        <h2>Your shopping cart is empty.</h2>
+    }
+</table>
+<div>
+    @if (Model != null && Model.CartToys != null)
+    {
+        <a asp-controller="Orders" asp-action="Create" class="btn btn-secondary"
+        asp-route-selectedToys="@string.Join(",", Model.CartToys.Select(ct => ct.ToyID))">
+            Place order
+        </a>
+    }
+</div>

@@ -1,0 +1,136 @@
+﻿@model Vilau_Paula_Proiect.Models.ToyStoreViewModels.OrdersIndexData
+@{
+    ViewData["Title"] = "Orders";
+}
+<h2>Orders</h2>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Order Date</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Toys</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Orders)
+        {
+            string selectedRow = "";
+            if (item.OrderID == (int?)ViewData["OrderID"])
+            {
+                selectedRow = "table-info";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientEmail)
+                </td>
+                <td>
+                    @{
+                        foreach (var toy in item.OrderedToys)
+                        {
+                            @toy.Toy.ToyID @: @toy.Toy.Name
+                            <br />
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-action="AllOrders" asp-route-id="@item.OrderID">Select</a> |
+                    <a asp-action="Details" asp-route-id="@item.OrderID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.OrderID" asp-route-type="all">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Toys != null)
+{
+    <h3>Toys Orderd in Selected Order</h3>
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>Price</th>
+        </tr>
+        @foreach (var item in Model.Toys)
+        {
+            string selectedRow = "";
+            if (item.ToyID == (int?)ViewData["ToyID"])
+            {
+                selectedRow = "table-info";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.ActionLink("Select", "AllOrders", new { toyId = item.ToyID })
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    <img src="~/images/@item.Image" alt="@item.Name" height="50" width="50">
+                </td>
+                <td>
+                    @item.Description
+                </td>
+                <td>
+                    @item.Price
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@if (Model.Reviews != null)
+{
+    <h3>Reviews for toy : @ViewData["ToyName"]</h3>
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>Review Date</th>
+            <th>Rating</th>
+            <th>Text</th>
+            <th>Customer</th>
+        </tr>
+        @foreach (var item in Model.Reviews)
+        {
+            string selectedRow = "";
+            if (item.ToyId == (int?)ViewData["ToyID"])
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @item.ReviewDate
+                </td>
+                <td>
+                    @item.Stars <img src="~/images/star.png" alt="star" height="25" width="25">
+                </td>
+                <td>
+                    @item.Text
+                </td>
+
+                <!--
+                <td>
+                @item.Client.Name
+                </td>
+
+                <td>
+                @Html.ActionLink("Details about client", "Index", new { customerId = item.Client.ClientId })
+                </td>
+                -->
+                <td>
+                    <p>Name: @item.Client.Name</p>
+                    <p>Address: @item.Client.Address</p>
+                </td>
+            </tr>
+        }
+    </table>
+}

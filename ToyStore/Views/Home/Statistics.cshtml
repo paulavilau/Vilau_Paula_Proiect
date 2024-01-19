@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Vilau_Paula_Proiect.Models.ToyStoreViewModels.SupplierGroup>
+@{
+    ViewData["Title"] = "Toys Suppliers Statistics";
+}
+<h2>Toys Suppliers Statistics</h2>
+<table class="table table-bordered">
+    <tr>
+        <th>
+            Supplier Name
+        </th>
+        <th>
+            Toys
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupplierName)
+            </td>
+            <td>
+                @item.ToyCount
+            </td>
+        </tr>
+    }
+</table>

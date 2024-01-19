@@ -1,0 +1,90 @@
+﻿@model Vilau_Paula_Proiect.Models.Toy
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+@if (@ViewData["Message"] != null)
+{
+    <div class="text-danger">
+        @ViewData["Message"]
+    </div>
+}
+<form method="post" asp-action="Create" asp-controller="Carts">
+    <input type="hidden" name="ToyId" value="@Model.ToyID" />
+    <button type="submit" class="btn btn-secondary">Add to Cart</button>
+    <label for="Quantity">Quantity</label>
+    <input name="Quantity" value="Quantity" type="number" min="1" max="99"/>
+</form>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            Brand
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Supplier.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        <dd class = "col-sm-10">
+           <!-- @Html.DisplayFor(model => model.Image) -->
+            <img src="~/images/@Model.Image" alt="@Model.Name" height="250" width="250">
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price) lei
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Reviews)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Stars</th>
+                    <th>Text</th>
+                </tr>
+                @foreach (var item in Model.Reviews)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Client.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReviewDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Stars) <img src="~/images/star.png" alt="stars" height="25" width="25">
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Text)
+                        </td>
+                    </tr>
+                }
+                <a asp-controller="Reviews" asp-action="Create" asp-route-id="@Model?.ToyID" class="btn btn-secondary">Leave a review</a>
+            </table>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ToyID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
